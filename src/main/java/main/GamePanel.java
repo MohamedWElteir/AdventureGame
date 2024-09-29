@@ -4,6 +4,7 @@ import entity.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 // works as a game screen
 public class GamePanel extends JPanel implements Runnable{
@@ -27,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
         int playerY = 100;
         int playerSpeed = 4;
 
-        public GamePanel(){
+        public GamePanel() throws IOException {
             this.setPreferredSize(new Dimension(screenWidth, screenHeight));
             this.setBackground(Color.BLACK);
             this.setDoubleBuffered(true); // improve game's rendering performance
@@ -40,43 +41,6 @@ public class GamePanel extends JPanel implements Runnable{
             gameThread = new Thread(this);
             gameThread.start();
         }
-//    @Override
-//    public void run() {
-//           double drawInterval = (double) 1_000_000_000 / FPS;
-//           double nextDraw = System.nanoTime() + drawInterval;
-//           long start = System.nanoTime();
-//           long current;
-//           long timer = 0;
-//           long counter = 0;
-//            while(gameThread != null){
-//                current = System.nanoTime();
-//                update();
-//
-//                repaint();
-//                counter++;
-//                timer += (current - start);
-//                start = current;
-//
-//                try {
-//                    double remainingTime = nextDraw - System.nanoTime();
-//                    remainingTime /= 1_000_000; // convert to milli
-//                    if(remainingTime < 0){
-//                        remainingTime = 0;
-//                    }
-//                    Thread.sleep((long)remainingTime);
-//                    nextDraw += drawInterval;
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                if(timer >= 1_000_000_000){
-//                    timer = 0;
-//                    System.out.println("FPS: " + counter);
-//                    counter = 0;
-//
-//                }
-//
-//            }
-//    }
 
 
     @Override

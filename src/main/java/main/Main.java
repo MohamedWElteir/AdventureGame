@@ -2,9 +2,10 @@ package main;
 
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
@@ -14,7 +15,7 @@ public class Main {
         window.add(gamepanel);
 
         window.pack(); //make the window size fit the preferred size and layouts of its subcomponents
-
+    
         window.setLocationRelativeTo(null); // at the center of the screen
         window.setVisible(true);
 
