@@ -13,7 +13,8 @@ public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
-    private final int STEPS = 12;
+
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -45,67 +46,91 @@ public class Player extends Entity{
         x = 100;
         y = 100;
         speed = 4;
-        direction = "down";
+        currentDirection = Direction.DOWN;
+        limit = 12;
+        currentImage = null;
+    }
+    public boolean updatePlayerDirection(){
+        if(keyH.up){
+            y -= speed;
+            currentDirection = Direction.UP;
+            return true;
+        }
+        if(keyH.down){
+           y += speed;
+            currentDirection = Direction.DOWN;
+            return true;
+        }
+        if(keyH.left){
+            x -= speed;
+            currentDirection = Direction.LEFT;
+            return true;
+        }
+        if(keyH.right){
+            x += speed;
+            currentDirection = Direction.RIGHT;
+            return true;
+        }
+//        return Direction.DOWN;
+        return false;
     }
 
     public void update(){
-        if(keyH.up){
-            direction = "up";
-            y -= speed;
-        }else if(keyH.down){
-            direction = "down";
-            y += speed;
-        }else if(keyH.left){
-            direction = "left";
-            x -= speed;
-        }else if(keyH.right){
-            direction = "right";
-            x += speed;
-        }else{
-            return;
-        }
+        boolean moved = updatePlayerDirection();
+        if(!moved) return;
 
-        spriteCounter++;
-        if(spriteCounter == STEPS){
-            if(spriteNum == 1){
-                spriteNum = 2;
-            }else{
-                spriteNum = 1;
-            }
-            spriteCounter = 0;
+        spriteSteps++;
+
+        if(spriteSteps == limit){
+            spriteMoved = !spriteMoved;
+            spriteSteps = 0;
+        }
+    }
+
+    public void moveUp(){
+        if(spriteMoved){
+            currentImage = up1;
+        }else{
+            currentImage = up2;
+        }
+    }
+
+    public void moveDown(){
+        if(spriteMoved){
+            currentImage = down1;
+        }else{
+            currentImage = down2;
+        }
+    }
+
+    public void moveLeft(){
+        if(spriteMoved){
+            currentImage = left1;
+        }else{
+            currentImage = left2;
+        }
+    }
+
+    public void moveRight(){
+        if(spriteMoved){
+            currentImage = right1;
+        }else{
+            currentImage = right2;
         }
     }
 
     public void draw(Graphics2D g2){
 
-        BufferedImage image = null;
-
-        if(Objects.equals(direction, "up")){
-            if(spriteNum == 1){
-                image = up1;
-            }else{
-                image = up2;
-            }
-        }else if(Objects.equals(direction, "down")){
-            if(spriteNum == 1){
-                image = down1;
-            }else{
-                image = down2;
-            }
-        }else if(Objects.equals(direction, "left")){
-            if(spriteNum == 1){
-                image = left1;
-            }else{
-                image = left2;
-            }
-        }else if(Objects.equals(direction, "right")){
-            if(spriteNum == 1){
-                image = right1;
-            }else{
-                image = right2;
-            }
+        if(currentDirection.equals(Direction.UP)){
+            moveUp();
+        }else if(currentDirection.equals(Direction.DOWN)){
+            moveDown();
+        }else if(currentDirection.equals(Direction.LEFT)){
+            moveLeft();
+        }else if(currentDirection.equals(Direction.RIGHT)){
+            moveRight();
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(currentImage, x, y, gp.tileSize, gp.tileSize, null);
     }
 
 
