@@ -5,15 +5,16 @@ import main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
-
+    private static final Logger LOGGER = Logger.getLogger(Player.class.getName());
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -37,7 +38,7 @@ public class Player extends Entity{
             right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_right_2.png")));
 
         }catch (IOException e){
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error loading player images", e);
         }
 
     }
