@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements Runnable{
         Player player = new Player(this, KeyH);
 
 
-        public GamePanel() throws IOException {
+        public GamePanel(){
             this.setPreferredSize(new Dimension(screenWidth, screenHeight));
             this.setBackground(Color.BLACK);
             this.setDoubleBuffered(true); // improve game's rendering performance
