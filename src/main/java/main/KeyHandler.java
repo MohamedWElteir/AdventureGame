@@ -1,11 +1,28 @@
 package main;
 
+import entity.Entity;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KeyHandler implements KeyListener {
     public boolean up, down, right, left;
+    private final Map<Integer, Runnable> keyPressedActions = new HashMap<>();
+    private final Map<Integer, Runnable> keyReleasedAction = new HashMap<>();
 
+    public KeyHandler(){
+        keyPressedActions.put(KeyEvent.VK_W, () -> up = true);
+        keyPressedActions.put(KeyEvent.VK_A, () -> left = true);
+        keyPressedActions.put(KeyEvent.VK_S, () -> down = true);
+        keyPressedActions.put(KeyEvent.VK_D, () -> right = true);
+
+        keyReleasedAction.put(KeyEvent.VK_D, () -> right = false);
+        keyReleasedAction.put(KeyEvent.VK_W, () -> up = false);
+        keyReleasedAction.put(KeyEvent.VK_S, () -> down = false);
+        keyReleasedAction.put(KeyEvent.VK_A, () -> left = false);
+    }
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -13,38 +30,14 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode(); // number with the key pressed
-
-        if(code == KeyEvent.VK_W){
-            up = true;
-        }
-        if(code == KeyEvent.VK_S){
-            down = true;
-        }
-        if(code == KeyEvent.VK_D){
-            right = true;
-        }
-        if(code == KeyEvent.VK_A){
-            left = true;
-        }
+        keyPressedActions.getOrDefault(e.getKeyCode(), () -> {}).run();
 
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int code = e.getKeyCode();
-
-        if(code == KeyEvent.VK_W){
-            up = false;
-        }
-        if(code == KeyEvent.VK_S){
-            down = false;
-        }
-        if(code == KeyEvent.VK_D){
-            right = false;
-        }
-        if(code == KeyEvent.VK_A){
-            left = false;
-        }
+        keyReleasedAction.getOrDefault(e.getKeyCode(), () -> {}).run();
     }
+
+
 }

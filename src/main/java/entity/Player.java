@@ -5,37 +5,55 @@ import main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.Buffer;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Player extends Entity{
 
-    GamePanel gp;
-    KeyHandler keyH;
+    private final GamePanel gp;
+    private final KeyHandler keyH;
     private static final Logger LOGGER = Logger.getLogger(Player.class.getName());
-
+    private final EnumMap<Direction, BufferedImage[]> directionImages = new EnumMap<>(Direction.class);
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
         setDefault();
-        getPlayerImage();
+        loadPlayerImages();
     }
 
-    public void getPlayerImage(){
+    private BufferedImage loadImage(String path) throws IOException{
+        return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+    }
+
+    public void loadPlayerImages(){
         try{
-            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_1.png")));
-            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_2.png")));
 
-            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_down_1.png")));
-            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_down_2.png")));
+            directionImages.put(Direction.UP, new BufferedImage[]{
+                    loadImage("/player/boy_up_1.png"),
+                    loadImage("/player/boy_up_2.png")
+            });
 
-            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_left_1.png")));
-            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_left_2.png")));
+            directionImages.put(Direction.DOWN, new BufferedImage[]{
+                    loadImage("/player/boy_down_1.png"),
+                    loadImage("/player/boy_down_2.png")
+            });
 
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_right_1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_right_2.png")));
+            directionImages.put(Direction.LEFT, new BufferedImage[]{
+                    loadImage("/player/boy_left_1.png"),
+                    loadImage("/player/boy_left_2.png")
+            });
+
+            directionImages.put(Direction.RIGHT, new BufferedImage[]{
+                    loadImage("/player/boy_right_1.png"),
+                    loadImage("/player/boy_right_2.png")
+            });
 
         }catch (IOException e){
             LOGGER.log(Level.SEVERE, "Error loading player images", e);
@@ -43,36 +61,37 @@ public class Player extends Entity{
 
     }
 
-    public void setDefault(){
+    private void setDefault(){
         x = 100;
         y = 100;
         speed = 4;
         currentDirection = Direction.DOWN;
-        limit = 12;
+        stepCount = 0;
+        stepLimit = 12;
         currentImage = null;
     }
-    public boolean updatePlayerDirection(){
-        if(keyH.up){
+    private boolean updatePlayerDirection(){
+        Direction newDirection = null;
+
+        if (keyH.up) {
             y -= speed;
-            currentDirection = Direction.UP;
-            return true;
-        }
-        if(keyH.down){
-           y += speed;
-            currentDirection = Direction.DOWN;
-            return true;
-        }
-        if(keyH.left){
+            newDirection = Direction.UP;
+        } else if (keyH.down) {
+            y += speed;
+            newDirection = Direction.DOWN;
+        } else if (keyH.left) {
             x -= speed;
-            currentDirection = Direction.LEFT;
-            return true;
-        }
-        if(keyH.right){
+            newDirection = Direction.LEFT;
+        } else if (keyH.right) {
             x += speed;
-            currentDirection = Direction.RIGHT;
+            newDirection = Direction.RIGHT;
+        }
+
+        if (newDirection != null) {
+            currentDirection = newDirection;
             return true;
         }
-//        return Direction.DOWN;
+
         return false;
     }
 
@@ -80,57 +99,24 @@ public class Player extends Entity{
         boolean moved = updatePlayerDirection();
         if(!moved) return;
 
-        spriteSteps++;
+        stepCount++;
 
-        if(spriteSteps == limit){
+        if(stepCount == stepLimit){
             spriteMoved = !spriteMoved;
-            spriteSteps = 0;
+            stepCount = 0;
         }
     }
 
-    public void moveUp(){
-        if(spriteMoved){
-            currentImage = up1;
-        }else{
-            currentImage = up2;
+
+    private void getCurrentImage(){
+        BufferedImage[] images = directionImages.get(currentDirection);
+        if(images != null){
+            currentImage = spriteMoved ? images[0] : images[1];
         }
     }
-
-    public void moveDown(){
-        if(spriteMoved){
-            currentImage = down1;
-        }else{
-            currentImage = down2;
-        }
-    }
-
-    public void moveLeft(){
-        if(spriteMoved){
-            currentImage = left1;
-        }else{
-            currentImage = left2;
-        }
-    }
-
-    public void moveRight(){
-        if(spriteMoved){
-            currentImage = right1;
-        }else{
-            currentImage = right2;
-        }
-    }
-
     public void draw(Graphics2D g2){
+        getCurrentImage();
 
-        if(currentDirection.equals(Direction.UP)){
-            moveUp();
-        }else if(currentDirection.equals(Direction.DOWN)){
-            moveDown();
-        }else if(currentDirection.equals(Direction.LEFT)){
-            moveLeft();
-        }else if(currentDirection.equals(Direction.RIGHT)){
-            moveRight();
-        }
         g2.drawImage(currentImage, x, y, gp.tileSize, gp.tileSize, null);
     }
 
