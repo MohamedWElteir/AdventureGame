@@ -7,10 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +18,7 @@ public class Player extends Entity{
     private final KeyHandler keyH;
     private static final Logger LOGGER = Logger.getLogger(Player.class.getName());
     private final EnumMap<Direction, BufferedImage[]> directionImages = new EnumMap<>(Direction.class);
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -64,7 +62,7 @@ public class Player extends Entity{
     private void setDefault(){
         x = 100;
         y = 100;
-        speed = 4;
+        speed = 3;
         currentDirection = Direction.DOWN;
         stepCount = 0;
         stepLimit = 12;
@@ -72,18 +70,19 @@ public class Player extends Entity{
     }
     private boolean updatePlayerDirection(){
         Direction newDirection = null;
+        int currentSpeed = speed + (keyH.speedUp ? 1 : 0);
 
         if (keyH.up) {
-            y -= speed;
+            y -= currentSpeed;
             newDirection = Direction.UP;
         } else if (keyH.down) {
-            y += speed;
+            y += currentSpeed;
             newDirection = Direction.DOWN;
         } else if (keyH.left) {
-            x -= speed;
+            x -= currentSpeed;
             newDirection = Direction.LEFT;
         } else if (keyH.right) {
-            x += speed;
+            x += currentSpeed;
             newDirection = Direction.RIGHT;
         }
 

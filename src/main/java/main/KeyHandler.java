@@ -1,6 +1,5 @@
 package main;
 
-import entity.Entity;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KeyHandler implements KeyListener {
-    public boolean up, down, right, left;
+    public boolean up, down, right, left, speedUp;
     private final Map<Integer, Runnable> keyPressedActions = new HashMap<>();
     private final Map<Integer, Runnable> keyReleasedAction = new HashMap<>();
 
@@ -17,11 +16,13 @@ public class KeyHandler implements KeyListener {
         keyPressedActions.put(KeyEvent.VK_A, () -> left = true);
         keyPressedActions.put(KeyEvent.VK_S, () -> down = true);
         keyPressedActions.put(KeyEvent.VK_D, () -> right = true);
+        keyPressedActions.put(KeyEvent.VK_SHIFT, () -> speedUp = true);
 
         keyReleasedAction.put(KeyEvent.VK_D, () -> right = false);
         keyReleasedAction.put(KeyEvent.VK_W, () -> up = false);
         keyReleasedAction.put(KeyEvent.VK_S, () -> down = false);
         keyReleasedAction.put(KeyEvent.VK_A, () -> left = false);
+        keyReleasedAction.put(KeyEvent.VK_SHIFT, () -> speedUp = false);
     }
     @Override
     public void keyTyped(KeyEvent e) {
@@ -31,7 +32,6 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keyPressedActions.getOrDefault(e.getKeyCode(), () -> {}).run();
-
     }
 
     @Override

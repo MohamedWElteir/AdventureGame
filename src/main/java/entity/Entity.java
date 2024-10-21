@@ -20,4 +20,5 @@ public class Entity {
     protected  int stepCount;
     protected  int stepLimit;
     protected  boolean spriteMoved;
+
 }
