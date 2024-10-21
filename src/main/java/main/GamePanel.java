@@ -1,10 +1,10 @@
 package main;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 // works as a game screen
 public class GamePanel extends JPanel implements Runnable{
@@ -20,10 +20,9 @@ public class GamePanel extends JPanel implements Runnable{
         int FPS = 60;
 
         KeyHandler KeyH = new KeyHandler();
-
         Thread gameThread;
         Player player = new Player(this, KeyH);
-
+        TileManager tileManger = new TileManager(this);
 
         public GamePanel(){
             this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -83,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable{
             super.paintComponent(g);
 
             Graphics2D g2 = (Graphics2D)g;
-
+            tileManger.draw(g2);
             player.draw(g2);
 
             g2.dispose(); //save some resources
