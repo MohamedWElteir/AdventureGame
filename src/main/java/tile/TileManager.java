@@ -2,25 +2,32 @@ package tile;
 
 import main.GamePanel;
 import utils.ImageLoader;
+import utils.TextLoader;
 
 import java.awt.*;
 import java.util.EnumMap;
 
 
 public class TileManager {
-    private GamePanel gp;
-    private EnumMap<Tile.TileType, Tile> tiles;
+    private final GamePanel gp;
+    private final EnumMap<Tile.TileType, Tile> tiles;
+    private int[][] tileMap;
 
     public TileManager(GamePanel gp){
         this.gp = gp;
-        int numberOfTiles = 10;
         tiles = new EnumMap<>(Tile.TileType.class);
+        tileMap = new int[gp.maxScreenRow][gp.maxScreenCol];
         loadTileImages();
+        loadTilesMap();
     }
     private void loadTileImages(){
         tiles.put(Tile.TileType.GRASS, createTile("/tiles/grass.png", false));
         tiles.put(Tile.TileType.WATER, createTile("/tiles/water.png", true));
         tiles.put(Tile.TileType.WALL, createTile("/tiles/wall.png", true));
+    }
+
+    private void loadTilesMap(){
+        tileMap = TextLoader.loadTilesMap(gp,"/maps/mapLayout.txt");
     }
 
     private Tile createTile(String imagePath, boolean collision){
@@ -32,20 +39,15 @@ public class TileManager {
 
 
     public void draw(Graphics2D g2){
-        int tileSize = gp.tileSize;
-        int [][] mapLayout = {
-                {0, 0, 0},
-                {1, 2, 1},
-                {0, 0, 0}
-        };
 
-        for(int row = 0; row < mapLayout.length; row++){
-            for(int col = 0; col < mapLayout[row].length; col++){
-                Tile.TileType tileType = getTileType(mapLayout[row][col]);
-                Tile tile = tiles.get(tileType);
-                g2.drawImage(tile.image, col*tileSize, row*tileSize, tileSize, tileSize, null);
-            }
-        }
+
+       for(int row = 0; row < gp.maxScreenRow; row++){
+           for(int col = 0; col < gp.maxScreenCol; col++){
+               Tile tile = tiles.get(getTileType(tileMap[col][row]));
+               g2.drawImage(tile.image, col * gp.tileSize, row * gp.tileSize, gp.tileSize, gp.tileSize, null);
+           }
+       }
+
     }
 
     private Tile.TileType getTileType(int index){
