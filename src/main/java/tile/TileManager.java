@@ -19,7 +19,7 @@ public class TileManager {
     public TileManager(GamePanel gp){
         this.gp = gp;
         tiles = new EnumMap<>(Tile.TileType.class);
-        tileMap = new int[gp.maxScreenRow][gp.maxScreenCol];
+        tileMap = new int[gp.maxScreenCol][gp.maxScreenRow];
         loadTileImages();
         loadTilesMap();
     }
@@ -53,19 +53,11 @@ public class TileManager {
 
        for(int row = 0; row < gp.maxScreenRow; row++){
            for(int col = 0; col < gp.maxScreenCol; col++){
-               Tile tile = tiles.get(getTileType(tileMap[col][row]));
+               Tile tile = tiles.get(Tile.TileType.fromId(tileMap[col][row]));
                g2.drawImage(tile.image, col * gp.tileSize, row * gp.tileSize, gp.tileSize, gp.tileSize, null);
            }
        }
 
-    }
-
-    private Tile.TileType getTileType(int index){
-        return switch (index) {
-            case 1 -> Tile.TileType.WALL;
-            case 2 -> Tile.TileType.WATER;
-            default -> Tile.TileType.GRASS;
-        };
     }
 
 }

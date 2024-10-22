@@ -8,8 +8,8 @@ public class Tile {
 
     public enum TileType{
         GRASS(0),
-        WATER(1),
-        WALL(2),
+        WATER(2),
+        WALL(1),
         EARTH(3),
         SAND(4),
         TREE(5);
