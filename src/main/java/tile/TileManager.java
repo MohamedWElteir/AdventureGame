@@ -13,6 +13,9 @@ public class TileManager {
     private final EnumMap<Tile.TileType, Tile> tiles;
     private int[][] tileMap;
 
+    private final int worldMaxRow = 60;
+    private final int worldMaxCol = 60;
+
     public TileManager(GamePanel gp){
         this.gp = gp;
         tiles = new EnumMap<>(Tile.TileType.class);
@@ -21,13 +24,20 @@ public class TileManager {
         loadTilesMap();
     }
     private void loadTileImages(){
-        tiles.put(Tile.TileType.GRASS, createTile("/tiles/grass.png", false));
-        tiles.put(Tile.TileType.WATER, createTile("/tiles/water.png", true));
-        tiles.put(Tile.TileType.WALL, createTile("/tiles/wall.png", true));
+
+        for(Tile.TileType type: Tile.TileType.values()){
+            tiles.put(type, createTile("/tiles/" + type.name().toLowerCase() + ".png", type != Tile.TileType.GRASS));
+        }
+//        tiles.put(Tile.TileType.GRASS, createTile("/tiles/grass.png", false));
+//        tiles.put(Tile.TileType.EARTH, createTile("/tiles/earth.png", false));
+//        tiles.put(Tile.TileType.SAND, createTile("/tiles/sand.png", false));
+//        tiles.put(Tile.TileType.WATER, createTile("/tiles/water.png", true));
+//        tiles.put(Tile.TileType.WALL, createTile("/tiles/wall.png", true));
+//        tiles.put(Tile.TileType.TREE, createTile("/tiles/tree.png", true));
     }
 
     private void loadTilesMap(){
-        tileMap = TextLoader.loadTilesMap(gp,"/maps/mapLayout.txt");
+        tileMap = TextLoader.loadMap(gp.maxScreenRow, gp.maxScreenCol, "/maps/mapLayout.txt");
     }
 
     private Tile createTile(String imagePath, boolean collision){

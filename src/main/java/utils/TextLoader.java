@@ -13,29 +13,23 @@ public class TextLoader {
     private static final Logger LOGGER = Logger.getLogger(TextLoader.class.getName());
 
 
-    public static int[][] loadTilesMap(GamePanel gp, String path){
-        int[][] tilesMap = new int[gp.maxScreenCol][gp.maxScreenRow];
+    public static int[][] loadMap(int worldMaxRow, int worldMaxCol, String path){
+        int[][] map = new int[worldMaxCol][worldMaxRow];
 
         try{
             InputStream inputStream = TextLoader.class.getResourceAsStream(path);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            for(int row = 0; row < gp.maxScreenRow; row++){
-
-                String mapLine = bufferedReader.readLine();
-                String[] tileNumbers = mapLine.split(" ");
-
-                for(int col = 0; col < gp.maxScreenCol; col++){
-
-                    int tileNumber = Integer.parseInt(tileNumbers[col]);
-                    tilesMap[col][row] = tileNumber;
+            for(int row = 0; row < worldMaxRow; row++){
+                String[] tileNumbers = bufferedReader.readLine().split(" ");
+                for(int col = 0; col < worldMaxCol; col++){
+                    map[col][row] = Integer.parseInt(tileNumbers[col]);
                 }
             }
-            bufferedReader.close();
         }catch (Exception e){
-            LOGGER.log(Level.SEVERE, "Error loading map tiles: "+ path, e);
+            LOGGER.log(Level.SEVERE, "Error loading world map: "+ path, e);
         }
 
-        return tilesMap;
+        return map;
     }
 }

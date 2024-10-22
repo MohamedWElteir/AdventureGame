@@ -7,8 +7,28 @@ public class Tile {
     public boolean collision = false;
 
     public enum TileType{
-        GRASS,
-        WATER,
-        WALL
-    };
+        GRASS(0),
+        WATER(1),
+        WALL(2),
+        EARTH(3),
+        SAND(4),
+        TREE(5);
+
+        private final int id;
+
+        TileType(int id){
+            this.id = id;
+        }
+
+        public int getId(){
+            return id;
+        }
+
+        public static TileType fromId(int id){
+            for(TileType type: values()) {
+                if (type.getId() == id) return type;
+            }
+            return GRASS;
+        }
+    }
 }
