@@ -9,24 +9,24 @@ import java.util.EnumMap;
 
 
 public class TileManager {
-    private final GamePanel gp;
-    private final EnumMap<Tile.TileType, Tile> tiles;
+    private final GamePanel GP;
+    private final EnumMap<Tile.TileType, Tile> TILES;
     private int[][] tileMap;
 
-    private final int worldMaxRow = 60;
-    private final int worldMaxCol = 60;
+    public static final int WORLD_MAX_ROW = 50;
+    public static final int WORLD_MAX_COL = 50;
 
     public TileManager(GamePanel gp){
-        this.gp = gp;
-        tiles = new EnumMap<>(Tile.TileType.class);
-        tileMap = new int[gp.maxScreenCol][gp.maxScreenRow];
+        this.GP = gp;
+        TILES = new EnumMap<>(Tile.TileType.class);
+        tileMap = new int[GP.MAX_SCREEN_COL][GP.MAX_SCREEN_ROW];
         loadTileImages();
         loadTilesMap();
     }
     private void loadTileImages(){
 
         for(Tile.TileType type: Tile.TileType.values()){
-            tiles.put(type, createTile("/tiles/" + type.name().toLowerCase() + ".png", type != Tile.TileType.GRASS));
+            TILES.put(type, createTile("/tiles/" + type.name().toLowerCase() + ".png", type != Tile.TileType.GRASS));
         }
 //        tiles.put(Tile.TileType.GRASS, createTile("/tiles/grass.png", false));
 //        tiles.put(Tile.TileType.EARTH, createTile("/tiles/earth.png", false));
@@ -37,7 +37,7 @@ public class TileManager {
     }
 
     private void loadTilesMap(){
-        tileMap = TextLoader.loadMap(gp.maxScreenRow, gp.maxScreenCol, "/maps/mapLayout.txt");
+        tileMap = TextLoader.loadMap(GP.MAX_SCREEN_ROW, GP.MAX_SCREEN_COL, "/maps/mapLayout.txt");
     }
 
     private Tile createTile(String imagePath, boolean collision){
@@ -51,10 +51,10 @@ public class TileManager {
     public void draw(Graphics2D g2){
 
 
-       for(int row = 0; row < gp.maxScreenRow; row++){
-           for(int col = 0; col < gp.maxScreenCol; col++){
-               Tile tile = tiles.get(Tile.TileType.fromId(tileMap[col][row]));
-               g2.drawImage(tile.image, col * gp.tileSize, row * gp.tileSize, gp.tileSize, gp.tileSize, null);
+       for(int row = 0; row < GP.MAX_SCREEN_ROW; row++){
+           for(int col = 0; col < GP.MAX_SCREEN_COL; col++){
+               Tile tile = TILES.get(Tile.TileType.fromId(tileMap[col][row]));
+               g2.drawImage(tile.image, col * GP.TILE_SIZE, row * GP.TILE_SIZE, GP.TILE_SIZE, GP.TILE_SIZE, null);
            }
        }
 

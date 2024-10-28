@@ -3,7 +3,7 @@ package entity;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    protected   int x, y;
+    protected   int entityX, entityY;
     protected   int speed;
 
     protected   BufferedImage currentImage;
