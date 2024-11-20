@@ -1,10 +1,9 @@
 package entity;
-import tile.Tile;
 import tile.TileManager;
 import utils.ImageLoader;
 
 import main.GamePanel;
-import main.KeyHandler;
+import Handlers.KeyHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,20 +11,19 @@ import java.util.EnumMap;
 
 public class Player extends Entity{
 
-    private final GamePanel GP;
-    private final KeyHandler KEY_H;
-
+    private final GamePanel gamePanel;
+    private final KeyHandler keyHandlerObject;
+    private final int SCREEN_X, SCREEN_Y;
     private final EnumMap<Direction, BufferedImage[]> DIRECTION_IMAGES = new EnumMap<>(Direction.class);
 
-    private final int SCREEN_X;
-    private final int SCREEN_Y;
 
-    public Player(GamePanel gp, KeyHandler keyH){
-        this.GP = gp;
-        this.KEY_H = keyH;
 
-        this.SCREEN_X = GP.SCREEN_WIDTH / 2 - (GP.TILE_SIZE / 2); // center of the screen - half player size
-        this.SCREEN_Y = GP.SCREEN_HEIGHT / 2 - (GP.TILE_SIZE / 2);
+    public Player(GamePanel gamePanel, KeyHandler keyHandler){
+        this.gamePanel = gamePanel;
+        this.keyHandlerObject = keyHandler;
+
+        this.SCREEN_X = this.gamePanel.SCREEN_WIDTH / 2 - (this.gamePanel.TILE_SIZE / 2); // center of the screen - half player size
+        this.SCREEN_Y = this.gamePanel.SCREEN_HEIGHT / 2 - (this.gamePanel.TILE_SIZE / 2);
 
         setDefault();
         loadPlayerImages();
@@ -57,8 +55,8 @@ public class Player extends Entity{
     }
 
     private void setDefault(){
-        entityX = GP.TILE_SIZE * (TileManager.WORLD_MAX_ROW / 2);
-        entityY = GP.TILE_SIZE * (TileManager.WORLD_MAX_COL / 2);
+        entityX = gamePanel.TILE_SIZE * (TileManager.WORLD_MAX_ROW / 2);
+        entityY = gamePanel.TILE_SIZE * (TileManager.WORLD_MAX_COL / 2);
 
         speed = 3;
 
@@ -71,18 +69,18 @@ public class Player extends Entity{
     }
     private boolean updatePlayerDirection(){
         Direction newDirection = null;
-        int currentSpeed = speed + (KEY_H.speedUp ? 1 : 0);
+        int currentSpeed = speed + (keyHandlerObject.speedUp ? 1 : 0);
 
-        if (KEY_H.up) {
+        if (keyHandlerObject.up) {
             entityY -= currentSpeed;
             newDirection = Direction.UP;
-        } else if (KEY_H.down) {
+        } else if (keyHandlerObject.down) {
             entityY += currentSpeed;
             newDirection = Direction.DOWN;
-        } else if (KEY_H.left) {
+        } else if (keyHandlerObject.left) {
             entityX -= currentSpeed;
             newDirection = Direction.LEFT;
-        } else if (KEY_H.right) {
+        } else if (keyHandlerObject.right) {
             entityX += currentSpeed;
             newDirection = Direction.RIGHT;
         }
@@ -116,7 +114,7 @@ public class Player extends Entity{
     public void draw(Graphics2D g2){
         getCurrentImage();
 
-        g2.drawImage(currentImage, SCREEN_X, SCREEN_Y, GP.TILE_SIZE, GP.TILE_SIZE, null);
+        g2.drawImage(currentImage, SCREEN_X, SCREEN_Y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE, null);
     }
 
 

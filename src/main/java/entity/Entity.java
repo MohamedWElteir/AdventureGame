@@ -2,10 +2,13 @@ package entity;
 
 import java.awt.image.BufferedImage;
 
-public class Entity {
-    protected   int entityX, entityY;
+abstract class Entity {
+    protected   int entityX;
+    protected int entityY;
     protected   int speed;
-
+    protected  int stepCount;
+    protected  int stepLimit;
+    protected  boolean spriteMoved;
     protected   BufferedImage currentImage;
     public enum Direction{
         UP,
@@ -15,10 +18,5 @@ public class Entity {
     }
     protected  Direction currentDirection;
 
-
-
-    protected  int stepCount;
-    protected  int stepLimit;
-    protected  boolean spriteMoved;
 
 }

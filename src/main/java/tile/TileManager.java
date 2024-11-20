@@ -25,15 +25,10 @@ public class TileManager {
     }
     private void loadTileImages(){
 
-        for(Tile.TileType type: Tile.TileType.values()){
-            TILES.put(type, createTile("/tiles/" + type.name().toLowerCase() + ".png", type != Tile.TileType.GRASS));
+        for(var tile: Tile.TileType.values()){
+            TILES.put(tile, createTile("/tiles/" + tile.name().toLowerCase() + ".png", tile != Tile.TileType.GRASS));
         }
-//        tiles.put(Tile.TileType.GRASS, createTile("/tiles/grass.png", false));
-//        tiles.put(Tile.TileType.EARTH, createTile("/tiles/earth.png", false));
-//        tiles.put(Tile.TileType.SAND, createTile("/tiles/sand.png", false));
-//        tiles.put(Tile.TileType.WATER, createTile("/tiles/water.png", true));
-//        tiles.put(Tile.TileType.WALL, createTile("/tiles/wall.png", true));
-//        tiles.put(Tile.TileType.TREE, createTile("/tiles/tree.png", true));
+
     }
 
     private void loadTilesMap(){
@@ -49,7 +44,6 @@ public class TileManager {
 
 
     public void draw(Graphics2D g2){
-
 
        for(int row = 0; row < GP.MAX_SCREEN_ROW; row++){
            for(int col = 0; col < GP.MAX_SCREEN_COL; col++){

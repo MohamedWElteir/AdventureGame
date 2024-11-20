@@ -1,5 +1,6 @@
 package main;
 
+import Handlers.KeyHandler;
 import entity.Player;
 import tile.TileManager;
 
@@ -7,12 +8,12 @@ import javax.swing.*;
 import java.awt.*;
 
 // works as a game screen
-public class GamePanel extends JPanel implements Runnable{
+public final class GamePanel extends JPanel implements Runnable{
     // screen settings
-        final int originalTileSize = 16; // 16 * 16 tile (size of characters npcs and map in this game)
-        final int SCALE = 3; //scale the tile size
+        final int originalTileSize = 16; // 16 * 16 tile (size of characters, NPCs and map in this game)
+        final int SCALE = 4; //scale the tile size
 
-        public final int TILE_SIZE = originalTileSize * SCALE; // 48 * 48
+        public final int TILE_SIZE = originalTileSize * SCALE; // 64 px
         public final int MAX_SCREEN_COL = 16;
 
         public final int MAX_SCREEN_ROW = 12;
